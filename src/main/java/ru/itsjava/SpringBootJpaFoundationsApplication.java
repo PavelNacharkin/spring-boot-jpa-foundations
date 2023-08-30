@@ -1,7 +1,6 @@
 package ru.itsjava;
 
 import ru.itsjava.domain.Genre;
-import jakarta.transaction.Transactional;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -10,7 +9,7 @@ import ru.itsjava.repository.GenreRepository;
 
 import java.sql.SQLException;
 
-@Transactional
+
 @SpringBootApplication
 public class SpringBootJpaFoundationsApplication {
 
@@ -20,21 +19,29 @@ public class SpringBootJpaFoundationsApplication {
         System.out.println("genreRepository.getById(1L) = " + genreRepository.getById(1L));
 
         Genre genre = new Genre(0L, "western");
-        genreRepository.insert(genre);
+        genreRepository.save(genre);
         System.out.println("genreRepository.getById(3L) = " + genreRepository.getById(3L));
 
         Genre genre3 = genreRepository.getById(3L);
         genre3.setName("WESTERN");
-        genreRepository.update(genre3);
+        genreRepository.save(genre3);
         System.out.println("genreRepository.getById(3L) = " + genreRepository.getById(3L));
 
         genreRepository.deleteById(3L);
-        System.out.println("genreRepository.getById(3L) = " + genreRepository.getById(3L));
+        System.out.println("genreRepository.getById(3L).isPresent() = " + genreRepository.findById(3L).isPresent());
 
         FilmRepository filmRepository = context.getBean(FilmRepository.class);
         System.out.println(filmRepository.findAll());
 
         System.out.println("filmRepository.getById(1L) = " + filmRepository.getById(1L));
+
+//        System.out.println("genreRepository.getByName(\"WESTERN\") = " + genreRepository.getByName("WESTERN"));
+
+        System.out.println("genreRepository.getByName(\"WESTERN\").isPresent() = " + genreRepository.getByName("WESTERN").isPresent());
+
+        System.out.println("filmRepository.findFilmByTitleAndGenre(\"Harry Potter\",genreRepository.getById(1L)).isPresent() = " + filmRepository.findFilmByTitleAndGenre("Harry Potter", genreRepository.getById(1L)).isPresent());
+
+
         //  Console.main(args);
     }
 }
