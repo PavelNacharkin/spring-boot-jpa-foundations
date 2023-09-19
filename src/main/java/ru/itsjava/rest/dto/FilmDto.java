@@ -1,0 +1,48 @@
+package ru.itsjava.rest.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import ru.itsjava.domain.Film;
+import ru.itsjava.domain.Genre;
+import ru.itsjava.domain.Place;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+public class FilmDto {
+    private String id;
+    private String title;
+    private String genre;
+    private String places;
+
+    public static Film fromDto(FilmDto filmDto) {
+        long id = Long.parseLong(filmDto.id);
+        Genre genre = new Genre(0L, filmDto.genre);
+        String[] splitPlaces = filmDto.places.split(",");
+        List<Place> places = new ArrayList<>();
+        for (String splitPlace : splitPlaces) {
+            places.add(new Place(0L, splitPlace, id));
+        }
+        return new Film(id, filmDto.title, genre, places);
+    }
+
+    public static FilmDto toDto(Film film) {
+        String id = String.valueOf(film.getId());
+        String genre = film.getGenre().getName();
+        String title = film.getTitle();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Place place : film.getPlaces()) {
+            stringBuilder.append(place.getName()).append(",");
+        }
+
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        String place = stringBuilder.toString();
+
+        return new FilmDto(id, title, genre, place);
+    }
+
+
+}

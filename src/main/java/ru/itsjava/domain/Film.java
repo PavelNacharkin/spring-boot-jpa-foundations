@@ -1,12 +1,16 @@
 package ru.itsjava.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity(name = "films")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
